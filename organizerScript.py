@@ -55,7 +55,7 @@ zipped_suffixes = {
   ".arj"
 }
 
-program_suffixes = {
+executable_suffixes = {
   ".exe",
   ".msi",
   ".app",
@@ -114,10 +114,24 @@ incomplete_download_suffixes = {
     ".crdownload"
 }
 
+code_suffixes = {
+    ".py",
+}
+
+extensions_dict = {
+    "images":image_suffixes,
+    "docs":document_suffixes,
+    "zips":zipped_suffixes,
+    "exec":executable_suffixes,
+    "videos":vid_suffixes,
+    "audios":audio_suffixes,
+    "incomplete":incomplete_download_suffixes,
+    "code":code_suffixes
+}
 
 def organize_folder(target_dir:str):
     path = pathlib.Path(target_dir)
-    for item in path.iterdir():
-        print(item)
+    
+            
 
 organize_folder("./")
