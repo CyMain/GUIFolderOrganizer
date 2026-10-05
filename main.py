@@ -30,10 +30,9 @@ class MainWindow(QMainWindow):
 
         appHeroImageLabel = QLabel()
         appHeroImageLabel.setPixmap(QPixmap("./assets/images/CharaHolidays.jpg"))
+        appHeroImageLabel.setMaximumSize(QSize(400, 200))
 
         startButton = Organize_button("Start")
-        startButton.clicked.connect(organize_folder)
-
 
         layout = QVBoxLayout()
         layout.addWidget(appHeroImageLabel)

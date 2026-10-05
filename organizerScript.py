@@ -142,10 +142,32 @@ def organize_folder(target_dir:str):
 
 def make_folder(folder_type):
     folder_to_make = pathlib.Path() / folder_type
-    folder_to_make.mkdir(exist_ok=True)
-    return folder_to_make
+    try:
+        folder_new = False
+        if not folder_to_make.exists():
+            folder_new == True
+
+        folder_to_make.mkdir(exist_ok=True)
+
+        if folder_new:
+            print(f"{folder_to_make} successfully created")
+
+        print(folder_to_make, " folder made")
+        return folder_to_make
+    except:
+        print("Could not make: ", folder_to_make)
+        raise FolderNotFoundError(f"Could not make: {folder_to_make}")
 
 def organize(item, folder_type):
     target_folder = make_folder(folder_type)
     item.move_into(target_folder)
 
+
+
+
+
+
+class FolderNotFoundError(Exception):
+    """Used when a target directory does not exist."""
+
+    pass
