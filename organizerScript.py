@@ -131,7 +131,21 @@ extensions_dict = {
 
 def organize_folder(target_dir:str):
     path = pathlib.Path(target_dir)
-    
-            
+    # keys, values, then check the file ext against each value, and if the file ext
+    # is found in the value, then pass the key into a function that makes a folder for that key
+    # if it does not exist, and then add the file to that new folder.
+    for item in path.iterdir():
+        for key, value in extensions_dict.items():
+            if item.suffix in value:
+                organize(item, key)
 
-organize_folder("./")
+
+def make_folder(folder_type):
+    folder_to_make = pathlib.Path() / folder_type
+    folder_to_make.mkdir(exist_ok=True)
+    return folder_to_make
+
+def organize(item, folder_type):
+    target_folder = make_folder(folder_type)
+    item.move_into(target_folder)
+
