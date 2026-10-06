@@ -114,39 +114,41 @@ extensions_dict = {
     }
 }
 
+class FolderOrganizer():
+    def __init__(self, target_path):
+        self.target_path = pathlib.Path(target_path)
 
-def organize_folder(target_dir:str):
-    path = pathlib.Path(target_dir)
-    # keys, values, then check the file ext against each value, and if the file ext
-    # is found in the value, then pass the key into a function that makes a folder for that key
-    # if it does not exist, and then add the file to that new folder.
-    for item in path.iterdir():
-        for key, value in extensions_dict.items():
-            if item.suffix in value:
-                organize(item, key)
+    def organize_folder(self):
+        path = self.target_path
+        # keys, values, then check the file ext against each value, and if the file ext
+        # is found in the value, then pass the key into a function that makes a folder for that key
+        # if it does not exist, and then add the file to that new folder.
+        for item in path.iterdir():
+            for key, value in extensions_dict.items():
+                if item.suffix in value:
+                    self.organize(item, key)
 
+    def make_folder(self, folder_type):
+        folder_to_make = self.target_path / folder_type
+        try:
+            folder_new = False
+            if not folder_to_make.exists():
+                folder_new == True
 
-def make_folder(folder_type):
-    folder_to_make = pathlib.Path() / folder_type
-    try:
-        folder_new = False
-        if not folder_to_make.exists():
-            folder_new == True
+            folder_to_make.mkdir(exist_ok=True)
 
-        folder_to_make.mkdir(exist_ok=True)
+            if folder_new:
+                print(f"{folder_to_make} successfully created")
 
-        if folder_new:
-            print(f"{folder_to_make} successfully created")
+            print(folder_to_make, " folder made")
+            return folder_to_make
+        except:
+            print("Could not make: ", folder_to_make)
+            raise FolderNotFoundError(f"Could not make: {folder_to_make}")
 
-        print(folder_to_make, " folder made")
-        return folder_to_make
-    except:
-        print("Could not make: ", folder_to_make)
-        raise FolderNotFoundError(f"Could not make: {folder_to_make}")
-
-def organize(item, folder_type):
-    target_folder = make_folder(folder_type)
-    item.move_into(target_folder)
+    def organize(self, item, folder_type):
+        target_folder = self.make_folder(folder_type)
+        item.move_into(target_folder)
 
 
 
