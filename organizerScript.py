@@ -151,7 +151,7 @@ class FolderOrganizer():
         item.move_into(target_folder)
 
     def setPath(self, path):
-        self.target_path = self.target_path
+        self.target_path = pathlib.Path(path)
 
 
 
