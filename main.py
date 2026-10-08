@@ -44,12 +44,12 @@ class MainWindow(QMainWindow):
 
 
         self.directory_field = QLineEdit()
-        self.startButton = Organize_button("Start")
-        self.startButton.clicked.connect(self.organize_button_clicked)
+        self.chooseFolderButton = QPushButton("Choose Folder")
+        self.chooseFolderButton.clicked.connect(self.folder_button_clicked)
 
         directory_layout = QHBoxLayout()
         directory_layout.addWidget(self.directory_field)
-        directory_layout.addWidget(self.startButton)
+        directory_layout.addWidget(self.chooseFolderButton)
         
         buttons_container = QWidget()
         buttons_container.setLayout(directory_layout)
@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(app_container)
 
-    def organize_button_clicked(self):
+    def folder_button_clicked(self):
         dir_store = QFileDialog.getExistingDirectory(self, "Select a Folder to Organize");
         if dir_store:
             self.directory_field.setText(dir_store)
