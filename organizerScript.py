@@ -139,8 +139,8 @@ class FolderOrganizer():
 
             if folder_new:
                 print(f"{folder_to_make} successfully created")
+                print(folder_to_make, " folder made")
 
-            print(folder_to_make, " folder made")
             return folder_to_make
         except:
             print("Could not make: ", folder_to_make)
@@ -150,9 +150,11 @@ class FolderOrganizer():
         target_folder = self.make_folder(folder_type)
         item.move_into(target_folder)
 
-    def setPath(self, path):
+    def setPath(self, path:str):
         self.target_path = pathlib.Path(path)
 
+    def getCurrPath(self):
+        return self.target_path
 
 
 

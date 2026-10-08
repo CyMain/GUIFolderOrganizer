@@ -87,6 +87,9 @@ class MainWindow(QMainWindow):
         print("Directory: ", text)
         self.organizerObj.setPath(text)
         if text != "":
+            if not self.organizerObj.getCurrPath().exists():
+                print(f"{self.organizerObj.getCurrPath()} does not exist.")
+                return
             self.organize_button.setEnabled(True)
         else:
             self.organize_button.setDisabled(True)
