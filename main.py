@@ -1,5 +1,6 @@
-import sys
+import sys, pathlib
 from organizerScript import FolderOrganizer
+from organizerWorker import OrganizerWorker
 from customWidgets import (
     LogBoard
 )
@@ -27,11 +28,12 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.ui_setup()
-        self.organizerObj = FolderOrganizer()
+        self.target_path = ""
 
     def ui_setup(self):
         self.setWindowTitle("FolderOrganizerApp")
         self.setMinimumSize(QSize(500, 400))
+        self.resize(600, 500)
 
         appHeroLabel = QLabel("Welcome to my organizer App!!")
         appHeroLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -105,10 +107,9 @@ class MainWindow(QMainWindow):
 
     def directory_chosen(self, text):
         print("Directory: ", text)
-        self.organizerObj.setPath(text)
         if text != "":
-            if not self.organizerObj.getCurrPath().exists():
-                print(f"{self.organizerObj.getCurrPath()} does not exist.")
+            if not pathlib.Path(text).exists():
+                print(f"{pathlib.Path(text)} does not exist.")
                 return
             self.organize_button.setEnabled(True)
         else:
@@ -122,10 +123,23 @@ class MainWindow(QMainWindow):
 
     def organize_dir(self):
         self.log_view_setup()
-        self.organizerObj.organize_folder()
+        target_path = self.directory_field.text().strip()
 
-    def update_progress(self):
-        pass
+        self.log_board.clear()
+
+        self.worker = OrganizerWorker(target_path=target_path)
+
+        self.worker.log_signal.connect(self.append_log)
+        self.worker.finished_signal.connect(self.on_finished)
+
+        self.worker.start()
+
+    def append_log(self, text: str):
+        """Receives signal from the worker thread and updates the log text box."""
+        self.log_board.appendPlainText(text)
+
+    def on_finished(self):
+        print("Organization Completo!!")
 
 
 

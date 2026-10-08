@@ -16,11 +16,11 @@ class OrganizerWorker(QThread):
     def run(self):
         organizer = FolderOrganizer(
             target_path=self.target_path,
-            log_callback=self.log_signal.emit()
+            log_callback=self.log_signal.emit
             )
         try:
             organizer.organize_folder()
         except Exception as e:
-            self.log_signal.emit(f"Error: e")
+            self.log_signal.emit(f"Error: {e}")
         finally:
             self.finished_signal.emit()
