@@ -36,10 +36,12 @@ class MainWindow(QMainWindow):
         appHeroImageLabel = QLabel()
         appHeroImageLabel.setPixmap(QPixmap("./assets/images/CharaHolidays.jpg"))
         appHeroImageLabel.setMaximumSize(QSize(400, 200))
+        appHeroImageLabel.setScaledContents(True)
 
         layout = QVBoxLayout()
         layout.addWidget(appHeroImageLabel)
         layout.addWidget(appHeroLabel)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         container = QWidget()
         container.setLayout(layout)
@@ -54,6 +56,7 @@ class MainWindow(QMainWindow):
         directory_layout = QHBoxLayout()
         directory_layout.addWidget(self.directory_field)
         directory_layout.addWidget(self.chooseFolderButton)
+
         
         buttons_container = QWidget()
         buttons_container.setLayout(directory_layout)
