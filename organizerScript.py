@@ -120,6 +120,8 @@ class FolderOrganizer():
 
     def organize_folder(self):
         path = self.target_path
+        if not path.exists():
+            raise FolderNotFoundError(f"Directory {path} does not exist.")
         # keys, values, then check the file ext against each value, and if the file ext
         # is found in the value, then pass the key into a function that makes a folder for that key
         # if it does not exist, and then add the file to that new folder.
@@ -133,7 +135,7 @@ class FolderOrganizer():
         try:
             folder_new = False
             if not folder_to_make.exists():
-                folder_new == True
+                folder_new = True
 
             folder_to_make.mkdir(exist_ok=True)
 

@@ -1,6 +1,8 @@
 import sys
 from organizerScript import FolderOrganizer
-from customWidgets import Organize_button
+from customWidgets import (
+    LogBoard
+)
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -10,7 +12,8 @@ from PySide6.QtWidgets import (
     QLabel,
     QPushButton,
     QLineEdit,
-    QFileDialog
+    QFileDialog,
+    QProgressBar
     )
 from PySide6.QtCore import (
     Qt,
@@ -76,6 +79,23 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(app_container)
 
+    def log_view_setup(self):
+        self.log_board = LogBoard()
+
+        self.organize_progress_bar = QProgressBar()
+        self.organize_progress_bar.setRange(0, 100)
+        self.organize_progress_bar.setValue(0)
+
+
+        logs_layout = QVBoxLayout()
+        logs_layout.addWidget(self.log_board)
+        logs_layout.addWidget(self.organize_progress_bar)
+
+        logs_container = QWidget()
+        logs_container.setLayout(logs_layout)
+
+        self.setCentralWidget(logs_container)
+
     def folder_button_clicked(self):
         dir_store = QFileDialog.getExistingDirectory(self, "Select a Folder to Organize");
         if dir_store:
@@ -101,7 +121,11 @@ class MainWindow(QMainWindow):
             print("Organize button is diabled.")
 
     def organize_dir(self):
+        self.log_view_setup()
         self.organizerObj.organize_folder()
+
+    def update_progress(self):
+        pass
 
 
 
