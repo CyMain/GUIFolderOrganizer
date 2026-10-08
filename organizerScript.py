@@ -115,7 +115,7 @@ extensions_dict = {
 }
 
 class FolderOrganizer():
-    def __init__(self, target_path):
+    def __init__(self, target_path=""):
         self.target_path = pathlib.Path(target_path)
 
     def organize_folder(self):
@@ -149,6 +149,9 @@ class FolderOrganizer():
     def organize(self, item, folder_type):
         target_folder = self.make_folder(folder_type)
         item.move_into(target_folder)
+
+    def setPath(self, path):
+        self.target_path = self.target_path
 
 
 
