@@ -30,6 +30,8 @@ class MainWindow(QMainWindow):
         self.ui_setup()
         self.target_path = ""
 
+
+    ### Various Pages/Views of the Application
     def ui_setup(self):
         self.setWindowTitle("FolderOrganizerApp")
         self.setMinimumSize(QSize(500, 400))
@@ -98,6 +100,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(logs_container)
 
+    ### Various App methods.
     def folder_button_clicked(self):
         dir_store = QFileDialog.getExistingDirectory(self, "Select a Folder to Organize");
         if dir_store:
