@@ -100,6 +100,10 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(logs_container)
 
+    def finish_view_setup(self):
+        """Renders the finished screen. To be used when the app has finished an organizing operation."""
+
+
     ### Various App methods.
     def folder_button_clicked(self):
         dir_store = QFileDialog.getExistingDirectory(self, "Select a Folder to Organize");
