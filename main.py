@@ -14,11 +14,12 @@ from PySide6.QtWidgets import (
     QPushButton,
     QLineEdit,
     QFileDialog,
-    QProgressBar
+    QProgressBar,
     )
 from PySide6.QtCore import (
     Qt,
-    QSize
+    QSize,
+    QTimer
 )
 from PySide6.QtGui import (
     QPixmap
@@ -89,6 +90,7 @@ class MainWindow(QMainWindow):
         self.organize_progress_bar = QProgressBar()
         self.organize_progress_bar.setRange(0, 100)
         self.organize_progress_bar.setValue(0)
+        self.organize_progress_bar
 
 
         logs_layout = QVBoxLayout()
@@ -102,6 +104,33 @@ class MainWindow(QMainWindow):
 
     def finish_view_setup(self):
         """Renders the finished screen. To be used when the app has finished an organizing operation."""
+        ## Preparing the layouts
+        full_view_layout = QVBoxLayout() # For the whole view
+        buttons_layout = QHBoxLayout() # For just Revert and Close.
+        main_buttons_layout = QHBoxLayout() # For all the buttons
+
+        ## Preparing the various widgets
+        completion_label = QLabel("Folder organized!!")
+        back_to_home_button = QPushButton("Back to Home")
+        revert_operation_button = QPushButton("Revert")
+        close_button = QPushButton("Close the App")
+        close_button.clicked.connect(self.close_application)
+
+        ## Piecing together the widgets and layouts
+        buttons_layout.addWidget(revert_operation_button)
+        buttons_layout.addWidget(close_button)
+
+        main_buttons_layout.addWidget(back_to_home_button)
+        main_buttons_layout.addLayout(buttons_layout)
+
+        full_view_layout.addWidget(completion_label)
+        full_view_layout.addLayout(main_buttons_layout)
+
+
+        finished_view_container = QWidget()
+        finished_view_container.setLayout(full_view_layout)
+
+        self.setCentralWidget(finished_view_container)
 
 
     ### Various App methods.
@@ -147,6 +176,11 @@ class MainWindow(QMainWindow):
 
     def on_finished(self):
         print("Organization Completo!!")
+        QTimer.singleShot(2, self.finish_view_setup)
+
+    def close_application(self):
+        self.close()
+
 
 
 
