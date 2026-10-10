@@ -8,7 +8,7 @@ A fully functional Python app that allows you to organize your folders into subf
 
 This is a simple Python app built while learning to create GUI applications. Its purpose is to assist and completely automate the process of organizing files into folders based on specified conditions. 
 
-This repository is structured as follows:
+This repository is structured like so:
 
 * **`main.py`** – The main Python script that couples everything together.
 * **`organizerScript.py`** – Module that holds the core organizing script.
