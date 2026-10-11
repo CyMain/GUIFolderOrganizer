@@ -62,7 +62,7 @@ class HomeView(QWidget):
     
             self.organize_button = QPushButton("Organize")
             self.organize_button.setDisabled(True)
-            self.organize_button.clicked.connect(self.organize_dir)
+            self.organize_button.clicked.connect(self.on_organize_clicked)
     
     
             app_layout = QVBoxLayout()
@@ -70,10 +70,7 @@ class HomeView(QWidget):
             app_layout.addWidget(buttons_container)
             app_layout.addWidget(self.organize_button)
     
-            app_container = QWidget()
-            app_container.setLayout(app_layout)
-    
-            self.setCentralWidget(app_container)
+            self.setLayout(app_layout)
 
     def folder_button_clicked(self):
         from PySide6.QtWidgets import QFileDialog
