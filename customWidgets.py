@@ -1,12 +1,9 @@
 from PySide6.QtWidgets import (
-    QPushButton,
     QPlainTextEdit
 )
 from PySide6.QtCore import (
-    Qt,
     QSize
 )
-from organizerScript import FolderOrganizer
 
 class LogBoard(QPlainTextEdit):
     def __init__(self):
