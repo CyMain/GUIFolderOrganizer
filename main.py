@@ -1,5 +1,4 @@
 import sys, pathlib
-from organizerScript import FolderOrganizer
 from organizerWorker import OrganizerWorker
 from customWidgets import (
     LogBoard

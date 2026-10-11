@@ -170,8 +170,6 @@ class FolderOrganizer():
 
 
 
-
-
 class FolderNotFoundError(Exception):
     """Used when a target directory does not exist."""
 
