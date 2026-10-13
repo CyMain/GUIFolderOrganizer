@@ -119,10 +119,14 @@ class FolderOrganizer():
         self.target_path = pathlib.Path(target_path)
         self.log_callback = log_callback or print
 
-    def log(self, message:str):
+
+    def log(self, message:str, type:str=""):
         """Dispatches real-time updates to the callback."""
         if callable(self.log_callback):
-            self.log_callback(message)
+            self.log_callback({
+                "message":message,
+                "type":type
+                })
 
     def organize_folder(self):
         path = self.target_path
@@ -149,17 +153,26 @@ class FolderOrganizer():
 
             if folder_new:
                 print(f"{folder_to_make} successfully created")
-                self.log(f"Creating Directory: {folder_to_make}")
+                self.log(
+                    f"Creating Directory: {folder_to_make}",
+                    "Folder"
+                )
 
             return folder_to_make
         except Exception as e:
-            self.log(f"Could not make directory {folder_to_make}: {e}")
+            self.log(
+                f"Could not make directory {folder_to_make}: {e}",
+                "Error"
+            )
             print("Could not make: ", folder_to_make)
             raise FolderNotFoundError(f"Could not make: {folder_to_make}")
 
     def organize(self, item, folder_type):
         target_folder = self.make_folder(folder_type)
-        self.log(f"Moving {item} to {target_folder}")
+        self.log(
+            f"Moving {item} to {target_folder}",
+            "Move"
+        )
         item.move_into(target_folder)
 
     def setPath(self, path:str):

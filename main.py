@@ -51,9 +51,9 @@ class MainWindow(QMainWindow):
         self.worker.finished_signal.connect(self.on_finished)
         self.worker.start()
 
-    def append_log(self, text: str):
+    def append_log(self, message: dict):
         # Safely pushes logs right down into the specific widget
-        self.log_view.log_board.appendPlainText(text)
+        self.log_view.log_board.appendPlainText(f"{message["type"]}: {message["message"]}")
 
     def on_finished(self):
         print("Organization Completo!!")
