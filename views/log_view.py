@@ -18,3 +18,6 @@ class LogView(QWidget):
         logs_layout.addWidget(self.log_board)
         logs_layout.addWidget(self.organize_progress_bar)
         self.setLayout(logs_layout)
+
+    def getLogsDoc(self):
+        return self.log_board.getLogsDocument()

@@ -20,3 +20,6 @@ class LogBoard(QPlainTextEdit):
                 border-radius: 4px;
             }
         """)
+
+    def getLogsDocument(self):
+        return self.document()

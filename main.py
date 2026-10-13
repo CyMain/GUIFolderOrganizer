@@ -59,6 +59,7 @@ class MainWindow(QMainWindow):
         print("Organization Completo!!")
         # Switch to finish view (index 2) after brief delay
         QTimer.singleShot(2, lambda: self.view_stack.setCurrentIndex(2))
+        self.finish_view.setFinishLogsDoc(self.log_view.getLogsDoc())
 
 
 app = QApplication(sys.argv)
