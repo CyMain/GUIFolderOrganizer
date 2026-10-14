@@ -120,12 +120,30 @@ class FolderOrganizer():
         self.log_callback = log_callback or print
 
 
-    def log(self, message:str, type:str=""):
+    def log(self, message:dict, type:str=""):
         """Dispatches real-time updates to the callback."""
         if callable(self.log_callback):
-            self.log_callback({
-                "message":message,
-                "type":type
+            if type == "move":
+                self.log_callback({
+                    "message": message["message"],
+                    "prev_file_folder": message["prev_file_location"],
+                    "curr_file_folder": message["curr_file_location"],
+                    "file_name": message["file_name"],
+                    "operation": message["operation"],
+                    "type": type
+                })
+            elif type == "folder":
+                self.log_callback({
+                    "message":message["message"],
+                    "folder_name":message["folder_name"],
+                    "operation":type,
+                    "type":type
+                })
+            else:
+                self.log_callback({
+                    "message":message["message"],
+                    "operation": "General",
+                    "type": type
                 })
 
     def organize_folder(self):
@@ -136,14 +154,18 @@ class FolderOrganizer():
         # is found in the value, then pass the key into a function that makes a folder for that key
         # if it does not exist, and then add the file to that new folder.
 
-        self.log(f"Beginning organize operation on {path}")
+        self.log({
+            "message": f"Beginning organize operation on {path}"
+            })
 
         for item in path.iterdir():
             for key, value in extensions_dict.items():
                 if item.suffix in value:
                     self.organize(item, key)
 
-        self.log("Organization Complete!")
+        self.log({
+            "message": "Organization Complete!"
+        })
 
     def make_folder(self, folder_type):
         folder_to_make = self.target_path / folder_type
@@ -154,15 +176,20 @@ class FolderOrganizer():
             if folder_new:
                 print(f"{folder_to_make} successfully created")
                 self.log(
-                    f"Creating Directory: {folder_to_make}",
-                    "Folder"
+                    {
+                        "message": f"Creating Directory: {folder_to_make}",
+                        "folder_name": folder_type
+                    },
+                    "folder"
                 )
 
             return folder_to_make
         except Exception as e:
             self.log(
-                f"Could not make directory {folder_to_make}: {e}",
-                "Error"
+                {
+                    "message": f"Could not make directory {folder_to_make}: {e}"
+                },
+                "error"
             )
             print("Could not make: ", folder_to_make)
             raise FolderNotFoundError(f"Could not make: {folder_to_make}")
@@ -170,8 +197,14 @@ class FolderOrganizer():
     def organize(self, item, folder_type):
         target_folder = self.make_folder(folder_type)
         self.log(
-            f"Moving {item} to {target_folder}",
-            "Move"
+            {
+                "message": f"Moving {item} to {target_folder}",
+                "file_name": item,
+                "prev_file_location": self.target_path,
+                "curr_file_location": target_folder,
+                "operation": "move",
+            },
+            "move"
         )
         item.move_into(target_folder)
 

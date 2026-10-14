@@ -19,6 +19,9 @@ class MainWindow(QMainWindow):
         self.resize(600, 500)
         self.target_path = ""
 
+        # 0. Create operation stack
+        self.operations = []
+
         # 1. Create the router/stack
         self.view_stack = QStackedWidget()
         self.setCentralWidget(self.view_stack)
@@ -53,13 +56,29 @@ class MainWindow(QMainWindow):
 
     def append_log(self, message: dict):
         # Safely pushes logs right down into the specific widget
-        self.log_view.log_board.appendPlainText(f"{message["type"]}: {message["message"]}")
+        if message["type"] == "move":
+            self.operations.append({
+                "operation":message["operation"],
+                "prev_file_folder": message["prev_file_folder"],
+                "curr_file_folder": message["curr_file_folder"],
+                "file_name": message["file_name"],
+                "message": message["message"]
+            })
+        if message["type"] == "folder":
+            self.operations.append({
+                "message":message["message"],
+                "operation":message["operation"],
+                "folder_name":message["folder_name"]
+            })
+        
+        self.log_view.log_board.appendPlainText(f"{message["operation"]}: {message["message"]}")
 
     def on_finished(self):
         print("Organization Completo!!")
         # Switch to finish view (index 2) after brief delay
         QTimer.singleShot(2, lambda: self.view_stack.setCurrentIndex(2))
         self.finish_view.setFinishLogsDoc(self.log_view.getLogsDoc())
+        print(self.operations)
 
 
 app = QApplication(sys.argv)
