@@ -115,9 +115,17 @@ extensions_dict = {
 }
 
 class FolderOrganizer():
-    def __init__(self, target_path="", log_callback = None):
+    def __init__(
+            self,
+            target_path="",
+            log_callback = None,
+            reverting=False,
+            operations:list=None
+        ):
         self.target_path = pathlib.Path(target_path)
         self.log_callback = log_callback or print
+        if reverting:
+            self.operations = operations
 
 
     def log(self, message:dict, type:str=""):
@@ -126,8 +134,8 @@ class FolderOrganizer():
             if type == "move":
                 self.log_callback({
                     "message": message["message"],
-                    "prev_file_folder": message["prev_file_location"],
-                    "curr_file_folder": message["curr_file_location"],
+                    "prev_file_folder": message["prev_file_folder"],
+                    "curr_file_folder": message["curr_file_folder"],
                     "file_name": message["file_name"],
                     "operation": message["operation"],
                     "type": type
@@ -145,6 +153,49 @@ class FolderOrganizer():
                     "operation": "General",
                     "type": type
                 })
+
+    def revert(self):
+        path = self.target_path
+        if not path.exists():
+                    raise FolderNotFoundError(f"Directory {path} does not exist.")
+        
+        self.log({
+            "message": f"Beginning revert operation on {path}"
+        })
+
+        operations_queue = reversed(self.operations)
+
+        for op in operations_queue:
+            if op["operation"] == "move":
+                curr_file = op["curr_file_folder"]/ op["file_name"].name
+                curr_file.move_into(op["prev_file_folder"])
+                self.log({
+                    "message": f"Moved {op["file_name"]} back to {op["prev_file_folder"]}",
+                    "prev_file_folder": op["prev_file_folder"],
+                    "curr_file_folder": op["curr_file_folder"],
+                    "file_name": op["file_name"],
+                    "operation": op["operation"]
+                },
+                "move"
+                )
+            elif op["operation"] == "folder":
+                folder_path = path / op["folder_name"]
+                if folder_path.exists() and folder_path.is_dir():
+                    folder_path.rmdir()
+                    self.log(
+                        {
+                            "message": f"Deleting folder {op["folder_name"]}",
+                            "operation": op["operation"],
+                            "folder_name": op["folder_name"]
+                        },
+                        "folder"
+                    )
+            elif op["operation"] == "General":
+                self.log(
+                    {
+                        "message":"general operation reached."
+                    }
+                )
 
     def organize_folder(self):
         path = self.target_path
@@ -200,8 +251,8 @@ class FolderOrganizer():
             {
                 "message": f"Moving {item} to {target_folder}",
                 "file_name": item,
-                "prev_file_location": self.target_path,
-                "curr_file_location": target_folder,
+                "prev_file_folder": self.target_path,
+                "curr_file_folder": target_folder,
                 "operation": "move",
             },
             "move"

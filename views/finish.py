@@ -16,6 +16,7 @@ from customWidgets import LogBoard
 class FinishView(QWidget):
     back_home_requested = Signal()
     close_requested = Signal()
+    revert_op_requested = Signal()
 
     def __init__(self):
         super().__init__()
@@ -32,6 +33,7 @@ class FinishView(QWidget):
 
         # Revert Operation button
         self.revert_operation_button = QPushButton("Revert")
+        self.revert_operation_button.clicked.connect(self.revert_op_requested.emit)
 
         # Close Button
         self.close_button = QPushButton("Close the App")

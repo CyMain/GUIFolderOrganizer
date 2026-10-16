@@ -27,3 +27,13 @@ class OrganizerWorker(QThread):
                 })
         finally:
             self.finished_signal.emit()
+
+    def revert_operation(self, operations):
+        reverter = FolderOrganizer(
+            target_path= self.target_path,
+            log_callback=self.log_signal.emit,
+            reverting=True,
+            operations=operations
+        )
+
+        reverter.revert()
