@@ -37,6 +37,7 @@ class MainWindow(QMainWindow):
         self.view_stack.addWidget(self.finish_view)
 
         # 4. Connect View signals to MainWindow
+        self.home_view.close_app_signal.connect(self.close)
         self.home_view.start_organization.connect(self.organize_dir)
         self.finish_view.back_home_requested.connect(lambda: self.view_stack.setCurrentIndex(0))
         self.finish_view.close_requested.connect(self.close)

@@ -19,6 +19,7 @@ from PySide6.QtGui import (
 class HomeView(QWidget):
     folder_selected = Signal(str)
     start_organization = Signal(str)
+    close_app_signal = Signal()
 
     def __init__(self):
         super().__init__()
@@ -31,44 +32,44 @@ class HomeView(QWidget):
     
             appHeroLabel = QLabel("Welcome to my organizer App!!")
             appHeroLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    
+
+            # Initializing widgets
             appHeroImageLabel = QLabel()
+            self.directory_field = QLineEdit()
+            self.chooseFolderButton = QPushButton("Choose Folder")
+            self.organize_button = QPushButton("Organize")
+            self.customize_button = QPushButton("Customize Organization")
+            self.close_button = QPushButton("Close")
+
+            # Setting initial widget values
             appHeroImageLabel.setPixmap(QPixmap("./assets/images/CharaHolidays.jpg"))
             appHeroImageLabel.setMaximumSize(QSize(400, 200))
             appHeroImageLabel.setScaledContents(True)
+            self.organize_button.setDisabled(True)
     
-            layout = QVBoxLayout()
-            layout.addWidget(appHeroImageLabel)
-            layout.addWidget(appHeroLabel)
-            layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    
-            container = QWidget()
-            container.setLayout(layout)
-    
-    
-            self.directory_field = QLineEdit()
+
+            # Attatching slots to widget signals
             self.directory_field.textChanged.connect(self.directory_chosen)
-    
-            self.chooseFolderButton = QPushButton("Choose Folder")
             self.chooseFolderButton.clicked.connect(self.folder_button_clicked)
+            self.organize_button.clicked.connect(self.on_organize_clicked)
+            self.close_button.clicked.connect(self.close_app_signal.emit)
+
+            # Setting up layouts
+            hero_layout = QVBoxLayout()
+            hero_layout.addWidget(appHeroImageLabel)
+            hero_layout.addWidget(appHeroLabel)
+            hero_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
     
             directory_layout = QHBoxLayout()
             directory_layout.addWidget(self.directory_field)
             directory_layout.addWidget(self.chooseFolderButton)
     
-            
-            buttons_container = QWidget()
-            buttons_container.setLayout(directory_layout)
-    
-            self.organize_button = QPushButton("Organize")
-            self.organize_button.setDisabled(True)
-            self.organize_button.clicked.connect(self.on_organize_clicked)
-    
-    
             app_layout = QVBoxLayout()
-            app_layout.addWidget(container)
-            app_layout.addWidget(buttons_container)
+            app_layout.addLayout(hero_layout)
+            app_layout.addLayout(directory_layout)
             app_layout.addWidget(self.organize_button)
+            app_layout.addWidget(self.customize_button)
+            app_layout.addWidget(self.close_button)
     
             self.setLayout(app_layout)
 
